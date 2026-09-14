@@ -1,0 +1,27 @@
+%% ผู้เกี่ยวข้องกับธุรกิจ และหน้าที่ของแต่ละคน (Business Actors)
+%% render: npx -y @mermaid-js/mermaid-cli -i 01-business-actors.mmd -o 01-business-actors.svg
+
+graph LR
+    customer["👤 ลูกค้า<br/>ทั่วไป / ร้านค้า / ช่าง"]
+    seller["👤 พนักงานขาย"]
+    owner["👤 เจ้าของร้าน / ผู้จัดการ"]
+    rider["👤 พนักงานส่งของ"]
+    supplier["🏭 ผู้ขายส่ง (Supplier)"]
+
+    customer -->|"สั่งซื้อ / ชำระเงิน / รับสินค้า"| sale["🛒 การขายหน้าร้าน"]
+    seller -->|"เสนอราคา / บันทึกการขาย / ออกใบเสร็จ"| sale
+    seller -->|"ตรวจของคงเหลือ"| stock["📦 สินค้าคงคลัง"]
+
+    owner -->|"ตั้งราคา / กำหนดส่วนลดราคาส่ง"| price["💰 นโยบายราคา"]
+    owner -->|"มอบหมายงานส่ง / ตรวจหลักฐาน / ปิดงาน"| deliver["🚚 การจัดส่ง"]
+    owner -->|"อนุมัติยกเลิก / คืนเงิน"| cancel["↩️ การยกเลิก & คืนสินค้า"]
+    owner -->|"ดูยอดขาย / สินค้าขายดี"| report["📊 รายงานเพื่อการตัดสินใจ"]
+
+    rider -->|"รับงาน / ส่งของ / เก็บหลักฐาน"| deliver
+    supplier -->|"ส่งสินค้าเข้าร้าน"| stock
+
+    sale --> stock
+    price --> sale
+    deliver --> customer
+    cancel --> stock
+    sale --> report

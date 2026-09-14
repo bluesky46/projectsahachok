@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Process_Business" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0">
+  <bpmn:collaboration id="Process_Business_collab">
+    <bpmn:participant id="Process_Business_pool" name="ร้านขายหลังคาเหล็ก — กระบวนการขายและส่งมอบสินค้า" processRef="Process_Business" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Business" name="กระบวนการธุรกิจ: ขายและส่งมอบสินค้า — ร้านขายหลังคาเหล็ก" isExecutable="false">
+    <bpmn:laneSet id="Process_Business_lanes">
+      <bpmn:lane id="Process_Business_lane0" name="ลูกค้า">
+        <bpmn:flowNodeRef>start_cust</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_alt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e_nosale</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_pay</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_receive</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_sign</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e_closed</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>e_cancel</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Process_Business_lane1" name="พนักงานขาย">
+        <bpmn:flowNodeRef>t_check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_stock</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_offer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_record</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_pricetype</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_quote</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_receipt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_ship</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_refund</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Process_Business_lane2" name="เจ้าของร้าน / ผู้จัดการ">
+        <bpmn:flowNodeRef>t_assign</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_retry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_verify</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_proof</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_reject</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_close</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Process_Business_lane3" name="พนักงานส่งของ">
+        <bpmn:flowNodeRef>t_accept</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_deliver</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>gw_delivered</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_fail</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_proof</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>t_reproof</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="start_cust" name="ลูกค้าต้องการซื้อสินค้า">
+      <bpmn:outgoing>Process_Business_flow1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="t_request" name="แจ้งรายการสินค้าที่ต้องการ">
+      <bpmn:incoming>Process_Business_flow1</bpmn:incoming>
+      <bpmn:incoming>Process_Business_flow7</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="gw_alt" name="รับข้อเสนอทางเลือกไหม?">
+      <bpmn:incoming>Process_Business_flow5</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow6</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="e_nosale" name="ไม่เกิดการซื้อขาย">
+      <bpmn:incoming>Process_Business_flow6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="t_pay" name="ชำระเงิน">
+      <bpmn:incoming>Process_Business_flow11</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow12</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_receive" name="รับสินค้าที่ร้าน">
+      <bpmn:incoming>Process_Business_flow14</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow15</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_sign" name="รับสินค้า + เซ็นรับ">
+      <bpmn:incoming>Process_Business_flow25</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow26</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="e_closed" name="ปิดการขาย">
+      <bpmn:incoming>Process_Business_flow15</bpmn:incoming>
+      <bpmn:incoming>Process_Business_flow33</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="e_cancel" name="ยกเลิกรายการขาย">
+      <bpmn:incoming>Process_Business_flow24</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="t_check" name="ตรวจสอบสินค้า&#10;และจำนวนคงเหลือ">
+      <bpmn:incoming>Process_Business_flow2</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="gw_stock" name="มีสินค้าพอขายไหม?">
+      <bpmn:incoming>Process_Business_flow3</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow4</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t_offer" name="เสนอทางเลือก&#10;(สั่งเพิ่ม / สินค้าทดแทน)">
+      <bpmn:incoming>Process_Business_flow4</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_record" name="บันทึกรายการขาย">
+      <bpmn:incoming>Process_Business_flow8</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_pricetype" name="ระบุประเภทลูกค้า&#10;(ทั่วไป / ร้านค้า / ช่าง)&#10;เพื่อคิดราคาปลีกหรือราคาส่ง">
+      <bpmn:incoming>Process_Business_flow9</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow10</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_quote" name="แจ้งยอดรวมที่ต้องชำระ&#10;(รวมภาษีมูลค่าเพิ่ม)">
+      <bpmn:incoming>Process_Business_flow10</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow11</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_receipt" name="ออกใบเสร็จ">
+      <bpmn:incoming>Process_Business_flow12</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow13</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="gw_ship" name="ลูกค้ารับเองหรือให้จัดส่ง?">
+      <bpmn:incoming>Process_Business_flow13</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow14</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t_refund" name="คืนเงินลูกค้า&#10;และรับสินค้ากลับเข้าร้าน">
+      <bpmn:incoming>Process_Business_flow23</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow24</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_assign" name="มอบหมายงานจัดส่ง&#10;ให้พนักงานส่งของ">
+      <bpmn:incoming>Process_Business_flow16</bpmn:incoming>
+      <bpmn:incoming>Process_Business_flow22</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow17</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="gw_retry" name="นัดส่งใหม่ไหม?">
+      <bpmn:incoming>Process_Business_flow21</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow22</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow23</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t_verify" name="ตรวจหลักฐานการส่ง">
+      <bpmn:incoming>Process_Business_flow27</bpmn:incoming>
+      <bpmn:incoming>Process_Business_flow31</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow28</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="gw_proof" name="หลักฐานครบถ้วนไหม?">
+      <bpmn:incoming>Process_Business_flow28</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow29</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow32</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t_reject" name="แจ้งให้ส่งหลักฐานเพิ่ม">
+      <bpmn:incoming>Process_Business_flow29</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow30</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_close" name="ปิดงานจัดส่ง">
+      <bpmn:incoming>Process_Business_flow32</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow33</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_accept" name="รับงานจัดส่ง">
+      <bpmn:incoming>Process_Business_flow17</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow18</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="t_deliver" name="นำสินค้าไปส่งลูกค้า">
+      <bpmn:incoming>Process_Business_flow18</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow19</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="gw_delivered" name="ส่งสำเร็จไหม?">
+      <bpmn:incoming>Process_Business_flow19</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow20</bpmn:outgoing>
+      <bpmn:outgoing>Process_Business_flow25</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="t_fail" name="แจ้งเหตุผลที่ส่งไม่สำเร็จ">
+      <bpmn:incoming>Process_Business_flow20</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow21</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_proof" name="บันทึกหลักฐานการส่ง&#10;(รูปถ่าย / ลายเซ็นลูกค้า)">
+      <bpmn:incoming>Process_Business_flow26</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow27</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="t_reproof" name="ส่งหลักฐานเพิ่มเติม">
+      <bpmn:incoming>Process_Business_flow30</bpmn:incoming>
+      <bpmn:outgoing>Process_Business_flow31</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Process_Business_flow1" sourceRef="start_cust" targetRef="t_request" />
+    <bpmn:sequenceFlow id="Process_Business_flow2" sourceRef="t_request" targetRef="t_check" />
+    <bpmn:sequenceFlow id="Process_Business_flow3" sourceRef="t_check" targetRef="gw_stock" />
+    <bpmn:sequenceFlow id="Process_Business_flow4" name="ไม่พอ" sourceRef="gw_stock" targetRef="t_offer" />
+    <bpmn:sequenceFlow id="Process_Business_flow5" sourceRef="t_offer" targetRef="gw_alt" />
+    <bpmn:sequenceFlow id="Process_Business_flow6" name="ไม่รับ" sourceRef="gw_alt" targetRef="e_nosale" />
+    <bpmn:sequenceFlow id="Process_Business_flow7" name="รับข้อเสนอ" sourceRef="gw_alt" targetRef="t_request" />
+    <bpmn:sequenceFlow id="Process_Business_flow8" name="พอขาย" sourceRef="gw_stock" targetRef="t_record" />
+    <bpmn:sequenceFlow id="Process_Business_flow9" sourceRef="t_record" targetRef="t_pricetype" />
+    <bpmn:sequenceFlow id="Process_Business_flow10" sourceRef="t_pricetype" targetRef="t_quote" />
+    <bpmn:sequenceFlow id="Process_Business_flow11" sourceRef="t_quote" targetRef="t_pay" />
+    <bpmn:sequenceFlow id="Process_Business_flow12" sourceRef="t_pay" targetRef="t_receipt" />
+    <bpmn:sequenceFlow id="Process_Business_flow13" sourceRef="t_receipt" targetRef="gw_ship" />
+    <bpmn:sequenceFlow id="Process_Business_flow14" name="รับเองที่ร้าน" sourceRef="gw_ship" targetRef="t_receive" />
+    <bpmn:sequenceFlow id="Process_Business_flow15" sourceRef="t_receive" targetRef="e_closed" />
+    <bpmn:sequenceFlow id="Process_Business_flow16" name="ให้จัดส่ง" sourceRef="gw_ship" targetRef="t_assign" />
+    <bpmn:sequenceFlow id="Process_Business_flow17" sourceRef="t_assign" targetRef="t_accept" />
+    <bpmn:sequenceFlow id="Process_Business_flow18" sourceRef="t_accept" targetRef="t_deliver" />
+    <bpmn:sequenceFlow id="Process_Business_flow19" sourceRef="t_deliver" targetRef="gw_delivered" />
+    <bpmn:sequenceFlow id="Process_Business_flow20" name="ไม่สำเร็จ" sourceRef="gw_delivered" targetRef="t_fail" />
+    <bpmn:sequenceFlow id="Process_Business_flow21" sourceRef="t_fail" targetRef="gw_retry" />
+    <bpmn:sequenceFlow id="Process_Business_flow22" name="นัดส่งใหม่" sourceRef="gw_retry" targetRef="t_assign" />
+    <bpmn:sequenceFlow id="Process_Business_flow23" name="ยกเลิก" sourceRef="gw_retry" targetRef="t_refund" />
+    <bpmn:sequenceFlow id="Process_Business_flow24" sourceRef="t_refund" targetRef="e_cancel" />
+    <bpmn:sequenceFlow id="Process_Business_flow25" name="สำเร็จ" sourceRef="gw_delivered" targetRef="t_sign" />
+    <bpmn:sequenceFlow id="Process_Business_flow26" sourceRef="t_sign" targetRef="t_proof" />
+    <bpmn:sequenceFlow id="Process_Business_flow27" sourceRef="t_proof" targetRef="t_verify" />
+    <bpmn:sequenceFlow id="Process_Business_flow28" sourceRef="t_verify" targetRef="gw_proof" />
+    <bpmn:sequenceFlow id="Process_Business_flow29" name="ไม่ครบ" sourceRef="gw_proof" targetRef="t_reject" />
+    <bpmn:sequenceFlow id="Process_Business_flow30" sourceRef="t_reject" targetRef="t_reproof" />
+    <bpmn:sequenceFlow id="Process_Business_flow31" name="ส่งใหม่" sourceRef="t_reproof" targetRef="t_verify" />
+    <bpmn:sequenceFlow id="Process_Business_flow32" name="ครบถ้วน" sourceRef="gw_proof" targetRef="t_close" />
+    <bpmn:sequenceFlow id="Process_Business_flow33" sourceRef="t_close" targetRef="e_closed" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Process_Business_diagram">
+    <bpmndi:BPMNPlane id="Process_Business_plane" bpmnElement="Process_Business_collab">
+      <bpmndi:BPMNShape id="Process_Business_pool_di" bpmnElement="Process_Business_pool" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="4820" height="910" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Process_Business_lane3_di" bpmnElement="Process_Business_lane3" isHorizontal="true">
+        <dc:Bounds x="190" y="830" width="4790" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Process_Business_lane2_di" bpmnElement="Process_Business_lane2" isHorizontal="true">
+        <dc:Bounds x="190" y="535" width="4790" height="295" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Process_Business_lane1_di" bpmnElement="Process_Business_lane1" isHorizontal="true">
+        <dc:Bounds x="190" y="240" width="4790" height="295" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Process_Business_lane0_di" bpmnElement="Process_Business_lane0" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="4790" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="start_cust_di" bpmnElement="start_cust">
+        <dc:Bounds x="262" y="130" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="200" y="172" width="161" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_request_di" bpmnElement="t_request">
+        <dc:Bounds x="430" y="103" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_alt_di" bpmnElement="gw_alt" isMarkerVisible="true">
+        <dc:Bounds x="1455" y="123" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1392" y="176" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e_nosale_di" bpmnElement="e_nosale">
+        <dc:Bounds x="1702" y="130" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1660" y="172" width="120" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_pay_di" bpmnElement="t_pay">
+        <dc:Bounds x="1870" y="103" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_receive_di" bpmnElement="t_receive">
+        <dc:Bounds x="2590" y="103" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_sign_di" bpmnElement="t_sign">
+        <dc:Bounds x="3550" y="103" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e_closed_di" bpmnElement="e_closed">
+        <dc:Bounds x="4822" y="130" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4815" y="106" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="e_cancel_di" bpmnElement="e_cancel">
+        <dc:Bounds x="4342" y="130" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4300" y="172" width="120" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_check_di" bpmnElement="t_check">
+        <dc:Bounds x="670" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_stock_di" bpmnElement="gw_stock" isMarkerVisible="true">
+        <dc:Bounds x="975" y="283" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="955" y="259" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_offer_di" bpmnElement="t_offer">
+        <dc:Bounds x="1150" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_record_di" bpmnElement="t_record">
+        <dc:Bounds x="1150" y="398" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_pricetype_di" bpmnElement="t_pricetype">
+        <dc:Bounds x="1390" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_quote_di" bpmnElement="t_quote">
+        <dc:Bounds x="1630" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_receipt_di" bpmnElement="t_receipt">
+        <dc:Bounds x="2110" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_ship_di" bpmnElement="gw_ship" isMarkerVisible="true">
+        <dc:Bounds x="2415" y="283" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2397" y="245.5" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_refund_di" bpmnElement="t_refund">
+        <dc:Bounds x="4030" y="263" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_assign_di" bpmnElement="t_assign">
+        <dc:Bounds x="2590" y="558" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_retry_di" bpmnElement="gw_retry" isMarkerVisible="true">
+        <dc:Bounds x="3855" y="578" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3844" y="554" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_verify_di" bpmnElement="t_verify">
+        <dc:Bounds x="4030" y="558" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_proof_di" bpmnElement="gw_proof" isMarkerVisible="true">
+        <dc:Bounds x="4335" y="578" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4319" y="540.5" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_reject_di" bpmnElement="t_reject">
+        <dc:Bounds x="4510" y="558" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_close_di" bpmnElement="t_close">
+        <dc:Bounds x="4510" y="693" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_accept_di" bpmnElement="t_accept">
+        <dc:Bounds x="2830" y="853" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_deliver_di" bpmnElement="t_deliver">
+        <dc:Bounds x="3070" y="853" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gw_delivered_di" bpmnElement="gw_delivered" isMarkerVisible="true">
+        <dc:Bounds x="3375" y="873" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3340" y="929" width="120" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_fail_di" bpmnElement="t_fail">
+        <dc:Bounds x="3550" y="853" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_proof_di" bpmnElement="t_proof">
+        <dc:Bounds x="3790" y="853" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="t_reproof_di" bpmnElement="t_reproof">
+        <dc:Bounds x="4750" y="853" width="180" height="90" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Process_Business_flow1_di" bpmnElement="Process_Business_flow1">
+        <di:waypoint x="298" y="148" />
+        <di:waypoint x="430" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow2_di" bpmnElement="Process_Business_flow2">
+        <di:waypoint x="610" y="148" />
+        <di:waypoint x="640" y="148" />
+        <di:waypoint x="640" y="308" />
+        <di:waypoint x="670" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow3_di" bpmnElement="Process_Business_flow3">
+        <di:waypoint x="850" y="308" />
+        <di:waypoint x="975" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow4_di" bpmnElement="Process_Business_flow4">
+        <di:waypoint x="1025" y="308" />
+        <di:waypoint x="1150" y="308" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1057" y="282" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow5_di" bpmnElement="Process_Business_flow5">
+        <di:waypoint x="1240" y="263" />
+        <di:waypoint x="1240" y="148" />
+        <di:waypoint x="1455" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow6_di" bpmnElement="Process_Business_flow6">
+        <di:waypoint x="1505" y="148" />
+        <di:waypoint x="1702" y="148" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1528" y="122" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow7_di" bpmnElement="Process_Business_flow7">
+        <di:waypoint x="1480" y="173" />
+        <di:waypoint x="1480" y="222" />
+        <di:waypoint x="520" y="222" />
+        <di:waypoint x="520" y="193" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="203" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow8_di" bpmnElement="Process_Business_flow8">
+        <di:waypoint x="1000" y="333" />
+        <di:waypoint x="1000" y="443" />
+        <di:waypoint x="1150" y="443" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1023" y="421" width="33" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow9_di" bpmnElement="Process_Business_flow9">
+        <di:waypoint x="1330" y="443" />
+        <di:waypoint x="1480" y="443" />
+        <di:waypoint x="1480" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow10_di" bpmnElement="Process_Business_flow10">
+        <di:waypoint x="1570" y="308" />
+        <di:waypoint x="1630" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow11_di" bpmnElement="Process_Business_flow11">
+        <di:waypoint x="1810" y="308" />
+        <di:waypoint x="1840" y="308" />
+        <di:waypoint x="1840" y="148" />
+        <di:waypoint x="1870" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow12_di" bpmnElement="Process_Business_flow12">
+        <di:waypoint x="2050" y="148" />
+        <di:waypoint x="2080" y="148" />
+        <di:waypoint x="2080" y="308" />
+        <di:waypoint x="2110" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow13_di" bpmnElement="Process_Business_flow13">
+        <di:waypoint x="2290" y="308" />
+        <di:waypoint x="2415" y="308" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow14_di" bpmnElement="Process_Business_flow14">
+        <di:waypoint x="2465" y="308" />
+        <di:waypoint x="2527" y="308" />
+        <di:waypoint x="2527" y="148" />
+        <di:waypoint x="2590" y="148" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2475" y="122" width="104" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow15_di" bpmnElement="Process_Business_flow15">
+        <di:waypoint x="2680" y="193" />
+        <di:waypoint x="2680" y="220" />
+        <di:waypoint x="4840" y="220" />
+        <di:waypoint x="4840" y="166" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow16_di" bpmnElement="Process_Business_flow16">
+        <di:waypoint x="2440" y="333" />
+        <di:waypoint x="2440" y="603" />
+        <di:waypoint x="2590" y="603" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2451" y="579" width="38" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow17_di" bpmnElement="Process_Business_flow17">
+        <di:waypoint x="2770" y="603" />
+        <di:waypoint x="2800" y="603" />
+        <di:waypoint x="2800" y="898" />
+        <di:waypoint x="2830" y="898" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow18_di" bpmnElement="Process_Business_flow18">
+        <di:waypoint x="3010" y="898" />
+        <di:waypoint x="3070" y="898" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow19_di" bpmnElement="Process_Business_flow19">
+        <di:waypoint x="3250" y="898" />
+        <di:waypoint x="3375" y="898" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow20_di" bpmnElement="Process_Business_flow20">
+        <di:waypoint x="3425" y="898" />
+        <di:waypoint x="3550" y="898" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3451" y="872" width="38" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow21_di" bpmnElement="Process_Business_flow21">
+        <di:waypoint x="3640" y="853" />
+        <di:waypoint x="3640" y="603" />
+        <di:waypoint x="3855" y="603" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow22_di" bpmnElement="Process_Business_flow22">
+        <di:waypoint x="3880" y="628" />
+        <di:waypoint x="3880" y="812" />
+        <di:waypoint x="2680" y="812" />
+        <di:waypoint x="2680" y="648" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2687" y="673" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow23_di" bpmnElement="Process_Business_flow23">
+        <di:waypoint x="3905" y="603" />
+        <di:waypoint x="3967" y="603" />
+        <di:waypoint x="3967" y="308" />
+        <di:waypoint x="4030" y="308" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3937" y="282" width="60" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow24_di" bpmnElement="Process_Business_flow24">
+        <di:waypoint x="4210" y="308" />
+        <di:waypoint x="4276" y="308" />
+        <di:waypoint x="4276" y="148" />
+        <di:waypoint x="4342" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow25_di" bpmnElement="Process_Business_flow25">
+        <di:waypoint x="3400" y="873" />
+        <di:waypoint x="3400" y="310" />
+        <di:waypoint x="3640" y="310" />
+        <di:waypoint x="3640" y="193" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3604" y="297" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow26_di" bpmnElement="Process_Business_flow26">
+        <di:waypoint x="3730" y="148" />
+        <di:waypoint x="3760" y="148" />
+        <di:waypoint x="3760" y="898" />
+        <di:waypoint x="3790" y="898" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow27_di" bpmnElement="Process_Business_flow27">
+        <di:waypoint x="3970" y="898" />
+        <di:waypoint x="4000" y="898" />
+        <di:waypoint x="4000" y="603" />
+        <di:waypoint x="4030" y="603" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow28_di" bpmnElement="Process_Business_flow28">
+        <di:waypoint x="4210" y="603" />
+        <di:waypoint x="4335" y="603" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow29_di" bpmnElement="Process_Business_flow29">
+        <di:waypoint x="4385" y="603" />
+        <di:waypoint x="4510" y="603" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4424" y="577" width="31" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow30_di" bpmnElement="Process_Business_flow30">
+        <di:waypoint x="4690" y="603" />
+        <di:waypoint x="4720" y="603" />
+        <di:waypoint x="4720" y="898" />
+        <di:waypoint x="4750" y="898" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow31_di" bpmnElement="Process_Business_flow31">
+        <di:waypoint x="4840" y="943" />
+        <di:waypoint x="4840" y="972" />
+        <di:waypoint x="4120" y="972" />
+        <di:waypoint x="4120" y="648" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4634" y="953" width="32" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow32_di" bpmnElement="Process_Business_flow32">
+        <di:waypoint x="4360" y="628" />
+        <di:waypoint x="4360" y="738" />
+        <di:waypoint x="4510" y="738" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4420" y="713" width="39" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Process_Business_flow33_di" bpmnElement="Process_Business_flow33">
+        <di:waypoint x="4690" y="738" />
+        <di:waypoint x="4756" y="738" />
+        <di:waypoint x="4756" y="148" />
+        <di:waypoint x="4822" y="148" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
