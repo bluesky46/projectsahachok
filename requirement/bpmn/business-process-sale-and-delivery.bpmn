@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Process_Business" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_Process_Business" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0">
   <bpmn:collaboration id="Process_Business_collab">
     <bpmn:participant id="Process_Business_pool" name="ร้านขายหลังคาเหล็ก — กระบวนการขายและส่งมอบสินค้า" processRef="Process_Business" />
   </bpmn:collaboration>
@@ -209,16 +209,16 @@
       <bpmndi:BPMNShape id="Process_Business_pool_di" bpmnElement="Process_Business_pool" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="4820" height="910" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Process_Business_lane3_di" bpmnElement="Process_Business_lane3" isHorizontal="true">
+      <bpmndi:BPMNShape id="Process_Business_lane3_di" bpmnElement="Process_Business_lane3" isHorizontal="true" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
         <dc:Bounds x="190" y="830" width="4790" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Process_Business_lane2_di" bpmnElement="Process_Business_lane2" isHorizontal="true">
+      <bpmndi:BPMNShape id="Process_Business_lane2_di" bpmnElement="Process_Business_lane2" isHorizontal="true" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
         <dc:Bounds x="190" y="535" width="4790" height="295" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Process_Business_lane1_di" bpmnElement="Process_Business_lane1" isHorizontal="true">
+      <bpmndi:BPMNShape id="Process_Business_lane1_di" bpmnElement="Process_Business_lane1" isHorizontal="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
         <dc:Bounds x="190" y="240" width="4790" height="295" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Process_Business_lane0_di" bpmnElement="Process_Business_lane0" isHorizontal="true">
+      <bpmndi:BPMNShape id="Process_Business_lane0_di" bpmnElement="Process_Business_lane0" isHorizontal="true" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
         <dc:Bounds x="190" y="80" width="4790" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="start_cust_di" bpmnElement="start_cust">
